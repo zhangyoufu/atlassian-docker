@@ -1,0 +1,79 @@
+diff --git a/bin/setenv.sh b/bin/setenv.sh
+index 708130a..1cb308b 100755
+--- a/bin/setenv.sh
++++ b/bin/setenv.sh
+@@ -11,7 +11,7 @@ MIN_NOFILES_LIMIT=16384
+ #
+ #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
+ #
+-JVM_SUPPORT_RECOMMENDED_ARGS=""
++: ${JVM_SUPPORT_RECOMMENDED_ARGS:=""}
+ 
+ #
+ #  You can use variable below to modify garbage collector settings.
+@@ -24,13 +24,13 @@ JVM_GC_ARGS="-XX:+ExplicitGCInvokesConcurrent"
+ #
+ # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
+ #
+-JVM_MINIMUM_MEMORY="384m"
+-JVM_MAXIMUM_MEMORY="2048m"
++: ${JVM_MINIMUM_MEMORY:=384m}
++: ${JVM_MAXIMUM_MEMORY:=2048m}
+ 
+ #
+ # The following setting configures the size of JVM code cache.  A high value of reserved size allows Jira to work with more installed apps.
+ #
+-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m'
++JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=${JVM_RESERVED_CODE_CACHE_SIZE:=512m}'
+ 
+ #
+ # The following are the required arguments for Jira.
+diff --git a/conf/catalina.properties b/conf/catalina.properties
+index 8f12289..ac77af5 100644
+--- a/conf/catalina.properties
++++ b/conf/catalina.properties
+@@ -212,3 +212,6 @@ tomcat.util.buf.StringCache.byte.enabled=true
+ # Allow for changes to HTTP request validation
+ # WARNING: Using this option may expose the server to CVE-2016-6816
+ #tomcat.util.http.parser.HttpParser.requestTargetAllow=|
++
++# Use environment variables as property source (consumed by conf/server.xml)
++org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.Digester$EnvironmentPropertySource
+diff --git a/conf/server.xml b/conf/server.xml
+index 756321d..5e79d80 100644
+--- a/conf/server.xml
++++ b/conf/server.xml
+@@ -15,7 +15,7 @@
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+-<Server port="8005" shutdown="SHUTDOWN">
++<Server port="${ATL_TOMCAT_MGMT_PORT}" shutdown="SHUTDOWN">
+     <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+     <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+@@ -32,10 +32,11 @@
+         -->
+ 
+         <!-- Relaxing chars because of JRASERVER-67974 -->
+-        <Connector port="8080" relaxedPathChars="[]|" relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+-                   maxThreads="150" minSpareThreads="25" connectionTimeout="20000" enableLookups="false"
+-                   maxHttpHeaderSize="8192" protocol="HTTP/1.1" useBodyEncodingForURI="true" redirectPort="8443"
+-                   acceptCount="100" disableUploadTimeout="true" bindOnInit="false"/>
++        <Connector port="${ATL_TOMCAT_PORT}" relaxedPathChars="[]|" relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
++                   maxThreads="${ATL_TOMCAT_MAXTHREADS}" minSpareThreads="${ATL_TOMCAT_MINSPARETHREADS}" connectionTimeout="${ATL_TOMCAT_CONNECTIONTIMEOUT}" enableLookups="${ATL_TOMCAT_ENABLELOOKUPS}"
++                   maxHttpHeaderSize="${ATL_TOMCAT_MAXHTTPHEADERSIZE}" protocol="${ATL_TOMCAT_PROTOCOL}" useBodyEncodingForURI="true" redirectPort="8443"
++                   acceptCount="${ATL_TOMCAT_ACCEPTCOUNT}" disableUploadTimeout="true" bindOnInit="false"
++                   proxyName="${ATL_PROXY_NAME}" proxyPort="${ATL_PROXY_PORT}" scheme="${ATL_TOMCAT_SCHEME}" secure="${ATL_TOMCAT_SECURE}" />
+ 
+         <!--
+          ==============================================================================================================
+@@ -99,7 +100,7 @@
+         <Engine name="Catalina" defaultHost="localhost">
+             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+ 
+-                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
++                <Context path="${ATL_TOMCAT_CONTEXTPATH}" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+                     <Manager pathname=""/>
