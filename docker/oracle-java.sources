@@ -1,0 +1,6 @@
+Types: deb
+URIs: https://zhangyoufu.github.io/oracle-java
+Suites: any
+Components: stable
+Architectures: amd64
+Signed-By: /etc/apt/oracle-java.gpg

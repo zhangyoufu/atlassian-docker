@@ -1,0 +1,77 @@
+on:
+  push:
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        include:
+        - version: '8.10.0-EAP01'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-EAP01.tar.gz'
+          md5: '623bad2650850c2f5e8926b73118fda6'
+          tags: '8.10.0-EAP01 8.10'
+        - version: '8.9.0'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.9.0.tar.gz'
+          md5: '9425568851d16e16e234b9f419a6ecf2'
+          tags: '8.9.0 8.9 8'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Download Jira from cache
+      uses: actions/cache@v2
+      id: jira-cache
+      with:
+        path: jira.tar.gz
+        key: jira-${{ matrix.md5 }}
+    - name: Download Jira from Atlassian
+      if: steps.jira-cache.outputs.cache-hit != 'true'
+      env:
+        URL: ${{ matrix.url }}
+      run: |
+        wget --quiet --show-progress --progress=dot:giga --output-document jira.tar.gz "${URL}"
+    - name: Check Jira integrity
+      env:
+        MD5: ${{ matrix.md5 }}
+      run: |
+        echo "${MD5}  jira.tar.gz" | md5sum --check
+    - name: Extract Jira
+      run: |
+        mkdir docker/jira
+        tar -xf jira.tar.gz -C docker/jira --strip-components=1 --no-same-owner
+    - name: Patch Jira
+      working-directory: docker/jira
+      run: |
+        # apply patch
+        patch -p1 <../../jira.patch
+        # misc
+        mkdir -p conf/Catalina/localhost
+        rm bin/*.bat bin/*.exe bin/*.dll bin/*.x64 temp/safeToDelete.tmp
+    - name: Copy support scripts
+      run: |
+        cp -lr docker-shared-components/support docker/
+    - name: Enable dockerd --experimental for docker build --squash
+      run: |
+        DOCKERD_CONFIG=$(jq '.+{experimental:true}' /etc/docker/daemon.json)
+        sudo tee /etc/docker/daemon.json <<< "${DOCKERD_CONFIG}"
+        sudo systemctl restart docker
+    - name: Build docker image
+      run: |
+        IMAGE_ID=$(docker build --squash --quiet docker)
+        echo "::set-env name=IMAGE_ID::${IMAGE_ID}"
+    - name: Push to Docker Hub
+      if: github.ref == 'refs/heads/master'
+      env:
+        TAGS: ${{ matrix.tags }}
+        IMAGE_PATH: ${{ secrets.IMAGE_PATH }}
+        REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      run: |
+        docker login --username "${REGISTRY_USERNAME}" --password "${REGISTRY_PASSWORD}" "${IMAGE_PATH%%/*}"
+        for TAG in ${TAGS}; do
+        	docker tag "${IMAGE_ID}" "${IMAGE_PATH}:${TAG}"
+        	docker push "${IMAGE_PATH}:${TAG}"
+        done
