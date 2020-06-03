@@ -127,6 +127,17 @@ unset "${!CATALINA_CONNECTOR_@}" CATALINA_CONTEXT_PATH
 ## ATL_TOMCAT_ environment variables are consumed by ${JIRA_INSTALL_DIR}/conf/server.xml
 
 ################################################################################
+# Jira-specific
+################################################################################
+
+: ${ATL_AUTOLOGIN_COOKIE_AGE:=1209600}
+_ATL_AUTOLOGIN_COOKIE_AGE=$(sed -n -e '/<param-name>autologin\.cookie\.age</{n;s|.*<param-value>\([0-9]\+\)<.*|\1|p}' "${JIRA_INSTALL_DIR}/atlassian-jira/WEB-INF/classes/seraph-config.xml")
+if [ "${ATL_AUTOLOGIN_COOKIE_AGE}" != "${_ATL_AUTOLOGIN_COOKIE_AGE}" ]; then
+	sed -i -e "/<param-name>autologin\.cookie\.age</{n;s|[0-9]\+|${ATL_AUTOLOGIN_COOKIE_AGE}|}" "${JIRA_INSTALL_DIR}/atlassian-jira/WEB-INF/classes/seraph-config.xml"
+fi
+unset ATL_AUTOLOGIN_COOKIE_AGE _ATL_AUTOLOGIN_COOKIE_AGE
+
+################################################################################
 # Database
 ################################################################################
 
