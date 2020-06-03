@@ -1,4 +1,4 @@
-FROM youfu/oracle-jre-headless:11@sha256:0ec717052b354eff1cc23794ffc634437984a5b508b4c1c2875db9f9ed0bc90d
+FROM youfu/oracle-jre-headless:14@sha256:5e065b321ef9adbe31c7be4aafab73a14d28d165b098f8087a21ce100917fab6
 
 # upgrade & install packages
 RUN apt-get update
