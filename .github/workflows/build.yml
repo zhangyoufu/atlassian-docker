@@ -9,10 +9,10 @@ jobs:
     strategy:
       matrix:
         include:
-        - version: '8.10.0-EAP01'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-EAP01.tar.gz'
-          md5: '623bad2650850c2f5e8926b73118fda6'
-          tags: '8.10.0-EAP01 8.10'
+        - version: '8.10.0-EAP02'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-EAP02.tar.gz'
+          md5: '5e0eb3637b0f3604391db504d0efcfe0'
+          tags: '8.10.0-EAP02 8.10'
         - version: '8.9.0'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.9.0.tar.gz'
           md5: '9425568851d16e16e234b9f419a6ecf2'
