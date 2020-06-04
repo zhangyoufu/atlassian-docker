@@ -2,7 +2,18 @@ on:
   push:
 
 jobs:
+  sync:
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Serialize workflow runs
+      if: github.ref == 'refs/heads/master'
+      uses: softprops/turnstyle@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
+    needs: sync
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     runs-on: ubuntu-latest
     timeout-minutes: 10
