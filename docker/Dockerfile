@@ -1,4 +1,4 @@
-FROM ubuntu:20.04@sha256:5747316366b8cc9e3021cd7286f42b2d6d81e3d743e2ab571f55bcd5df788cc8
+FROM ubuntu:latest@sha256:5747316366b8cc9e3021cd7286f42b2d6d81e3d743e2ab571f55bcd5df788cc8
 
 # upgrade/install distro packages
 RUN apt-get update
