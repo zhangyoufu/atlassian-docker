@@ -73,7 +73,7 @@ def main():
             if version > latest_version:
                 latest[version.major][version.minor] = (version, item)
 
-    repl = ''
+    versions = []
     for major in sorted(latest.keys(), reverse=True):
         first = True
         for minor in sorted(latest[major].keys(), reverse=True):
@@ -87,15 +87,14 @@ def main():
             assert item['zipUrl'].startswith('https://')
             assert re.fullmatch(r'[0-9a-f]{32}', item['md5'])
 
-            repl += f'''\
+            versions.append(f'''\
         - version: {item['version']!r}
           url: {item['zipUrl']!r}
           md5: {item['md5']!r}
-          tags: {' '.join(tags)!r}
-'''
+          tags: {' '.join(tags)!r}''')
 
     with open('.github/workflows/build.yml', 'r+') as f:
-        data, n = re.subn(r'(?s)(?<= include:\n).*?(?=    steps:)', repl, f.read(), count=1)
+        data, n = re.subn(r'(?ms)(?<=^# DONT-CHECKSUM-BEGIN\n).*?(?=\n^# DONT-CHECKSUM-END\n)', '\n'.join(versions), f.read(), count=1)
         assert n == 1
         f.seek(0)
         f.write(data)

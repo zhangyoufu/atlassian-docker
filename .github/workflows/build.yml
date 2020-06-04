@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         include:
+# DONT-CHECKSUM-BEGIN
         - version: '8.10.0-EAP02'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-EAP02.tar.gz'
           md5: '5e0eb3637b0f3604391db504d0efcfe0'
@@ -17,32 +18,56 @@ jobs:
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.9.0.tar.gz'
           md5: '9425568851d16e16e234b9f419a6ecf2'
           tags: '8.9.0 8.9 8'
+# DONT-CHECKSUM-END
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: true
+    - name: Calculate checksum
+      env:
+        MD5: ${{ matrix.md5 }}
+        FILES: |-
+          .github/workflows/build.yml
+          docker/**
+          docker-shared-components/support/**
+          jira.patch
+      run: |
+        FILES_HASH=$(./hashFiles.py <<<${FILES})
+        echo "::set-env name=CHECKSUM::${MD5}-${FILES_HASH}"
+    - name: Fetch last checksum from Docker image label
+      env:
+        IMAGE_PATH: ${{ secrets.IMAGE_PATH }}
+        TAG: ${{ matrix.version }}
+      run: |
+        set -o pipefail
+        (set +e; skopeo inspect "docker://${IMAGE_PATH}:${TAG}"; :) | ./last_checksum.py
     - name: Download Jira from cache
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       uses: actions/cache@v2
       id: jira-cache
       with:
         path: jira.tar.gz
         key: jira-${{ matrix.md5 }}
     - name: Download Jira from Atlassian
-      if: steps.jira-cache.outputs.cache-hit != 'true'
+      if: env.CHECKSUM != env.LAST_CHECKSUM && steps.jira-cache.outputs.cache-hit != 'true'
       env:
         URL: ${{ matrix.url }}
       run: |
         wget --quiet --show-progress --progress=dot:giga --output-document jira.tar.gz "${URL}"
     - name: Check Jira integrity
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       env:
         MD5: ${{ matrix.md5 }}
       run: |
+        set -o pipefail
         echo "${MD5}  jira.tar.gz" | md5sum --check
     - name: Extract Jira
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       run: |
         mkdir docker/jira
         tar -xf jira.tar.gz -C docker/jira --strip-components=1 --no-same-owner
     - name: Patch Jira
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       working-directory: docker/jira
       run: |
         # apply patch
@@ -51,19 +76,22 @@ jobs:
         mkdir -p conf/Catalina/localhost
         rm bin/*.bat bin/*.exe bin/*.dll bin/*.x64 temp/safeToDelete.tmp
     - name: Copy support scripts
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       run: |
         cp -lr docker-shared-components/support docker/
     - name: Enable dockerd --experimental for docker build --squash
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       run: |
         DOCKERD_CONFIG=$(jq '.+{experimental:true}' /etc/docker/daemon.json)
         sudo tee /etc/docker/daemon.json <<< "${DOCKERD_CONFIG}"
         sudo systemctl restart docker
     - name: Build docker image
+      if: env.CHECKSUM != env.LAST_CHECKSUM
       run: |
-        IMAGE_ID=$(docker build --squash --quiet docker)
+        IMAGE_ID=$(docker build --squash --quiet --label "build.checksum=${CHECKSUM}" docker)
         echo "::set-env name=IMAGE_ID::${IMAGE_ID}"
     - name: Push to Docker Hub
-      if: github.ref == 'refs/heads/master'
+      if: env.CHECKSUM != env.LAST_CHECKSUM && github.ref == 'refs/heads/master'
       env:
         TAGS: ${{ matrix.tags }}
         IMAGE_PATH: ${{ secrets.IMAGE_PATH }}
