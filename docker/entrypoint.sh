@@ -56,8 +56,8 @@ ensure_fs_owner_group_mode() {
 # Custom CA
 ################################################################################
 
-if [ $(stat -c %Y /etc/ssl/certs/ca-certificates.crt) -ne $(stat -c %Y /etc/ssl/certs/ca-certificates.crt /usr/local/share/ca-certificates/*.crt | sort --reverse --numeric-sort | head -n1) ]; then
-	update-ca-certificate
+if [ -w /etc/ssl/certs/ca-certificates.crt ] && [ -n "$(echo /usr/local/share/ca-certificates/*.crt)" ]; then
+	update-ca-certificates
 fi
 
 ################################################################################
@@ -66,34 +66,28 @@ fi
 
 ## reverse proxy
 
-: ${CATALINA_CONNECTOR_PROXYNAME:=}
-: ${ATL_PROXY_NAME:=${CATALINA_CONNECTOR_PROXYNAME}}
+: ${ATL_PROXY_NAME:=${CATALINA_CONNECTOR_PROXYNAME:-}}
 export ATL_PROXY_NAME
 
-: ${CATALINA_CONNECTOR_PROXYPORT:=}
-: ${ATL_PROXY_PORT:=${CATALINA_CONNECTOR_PROXYPORT}}
+: ${ATL_PROXY_PORT:=${CATALINA_CONNECTOR_PROXYPORT:-}}
 export ATL_PROXY_PORT
 
 : ${ATL_TOMCAT_PORT:=8080}
 export ATL_TOMCAT_PORT
 
-: ${CATALINA_CONNECTOR_SCHEME:=http}
-: ${ATL_TOMCAT_SCHEME:=${CATALINA_CONNECTOR_SCHEME}}
+: ${ATL_TOMCAT_SCHEME:=${CATALINA_CONNECTOR_SCHEME:-http}}
 export ATL_TOMCAT_SCHEME
 
 case "${ATL_TOMCAT_SCHEME}" in
-	https) CATALINA_CONNECTOR_SECURE_DEFAULT=true;;
-	http)  CATALINA_CONNECTOR_SECURE_DEFAULT=false;;
+	https) : ${CATALINA_CONNECTOR_SECURE:=true};;
+	http)  : ${CATALINA_CONNECTOR_SECURE:=false};;
 	*) echo 'ATL_TOMCAT_SCHEME unknown or not specified'; exit 1;;
 esac
-
-: ${CATALINA_CONNECTOR_SECURE:=${CATALINA_CONNECTOR_SECURE_DEFAULT}}
 : ${ATL_TOMCAT_SECURE:=${CATALINA_CONNECTOR_SECURE}}
 check_bool ATL_TOMCAT_SECURE
 export ATL_TOMCAT_SECURE
 
-: ${CATALINA_CONTEXT_PATH:=}
-: ${ATL_TOMCAT_CONTEXTPATH:=${CATALINA_CONTEXT_PATH}}
+: ${ATL_TOMCAT_CONTEXTPATH:=${CATALINA_CONTEXT_PATH:-}}
 export ATL_TOMCAT_CONTEXTPATH
 
 ## advanced Tomcat settings
@@ -123,8 +117,13 @@ export ATL_TOMCAT_ACCEPTCOUNT
 : ${ATL_TOMCAT_MAXHTTPHEADERSIZE:=8192}
 export ATL_TOMCAT_MAXHTTPHEADERSIZE
 
+## undocumented Tomcat settings
+
+: ${ATL_TOMCAT_REDIRECTPORT:=8443}
+export ATL_TOMCAT_REDIRECTPORT
+
 unset "${!CATALINA_CONNECTOR_@}" CATALINA_CONTEXT_PATH
-## ATL_TOMCAT_ environment variables are consumed by ${JIRA_INSTALL_DIR}/conf/server.xml
+## ATL_TOMCAT_ environment variables are consumed by conf/server.xml
 
 ################################################################################
 # Jira-specific
@@ -132,7 +131,7 @@ unset "${!CATALINA_CONNECTOR_@}" CATALINA_CONTEXT_PATH
 
 : ${ATL_AUTOLOGIN_COOKIE_AGE:=1209600}
 _ATL_AUTOLOGIN_COOKIE_AGE=$(sed -n -e '/<param-name>autologin\.cookie\.age</{n;s|.*<param-value>\([0-9]\+\)<.*|\1|p}' "${JIRA_INSTALL_DIR}/atlassian-jira/WEB-INF/classes/seraph-config.xml")
-if [ "${ATL_AUTOLOGIN_COOKIE_AGE}" != "${_ATL_AUTOLOGIN_COOKIE_AGE}" ]; then
+if [ -n "${_ATL_AUTOLOGIN_COOKIE_AGE}" ] && [ "${ATL_AUTOLOGIN_COOKIE_AGE}" != "${_ATL_AUTOLOGIN_COOKIE_AGE}" ]; then
 	sed -i -e "/<param-name>autologin\.cookie\.age</{n;s|[0-9]\+|${ATL_AUTOLOGIN_COOKIE_AGE}|}" "${JIRA_INSTALL_DIR}/atlassian-jira/WEB-INF/classes/seraph-config.xml"
 fi
 unset ATL_AUTOLOGIN_COOKIE_AGE _ATL_AUTOLOGIN_COOKIE_AGE
@@ -143,27 +142,27 @@ unset ATL_AUTOLOGIN_COOKIE_AGE _ATL_AUTOLOGIN_COOKIE_AGE
 
 DB_VARS=("${!ATL_DB_@}" "${!ATL_JDBC_@}")
 
-if [ -e "${JIRA_HOME}/dbconfig.xml" ] || [ ${#DB_VARS[@]} -gt 0 ]; then
+if [ ${#DB_VARS[@]} -gt 0 ]; then
 	case "${ATL_DB_TYPE}" in
 		mssql)
-			ATL_DB_SCHEMA_NAME_DEFAULT=dbo
-			ATL_DB_DRIVER_DEFAULT=com.microsoft.sqlserver.jdbc.SQLServerDriver
+			: ${ATL_DB_SCHEMA_NAME:=dbo}
+			: ${ATL_DB_DRIVER:=com.microsoft.sqlserver.jdbc.SQLServerDriver}
 		;;
 		mysql)
-			ATL_DB_SCHEMA_NAME_DEFAULT=public
-			ATL_DB_DRIVER_DEFAULT=com.mysql.jdbc.Driver
+			: ${ATL_DB_SCHEMA_NAME:=public}
+			: ${ATL_DB_DRIVER:=com.mysql.jdbc.Driver}
 		;;
 		oracle10g)
-			ATL_DB_SCHEMA_NAME_DEFAULT=
-			ATL_DB_DRIVER_DEFAULT=oracle.jdbc.OracleDriver
+			: ${ATL_DB_SCHEMA_NAME:=}
+			: ${ATL_DB_DRIVER:=oracle.jdbc.OracleDriver}
 		;;
 		postgres72)
-			ATL_DB_SCHEMA_NAME_DEFAULT=public
-			ATL_DB_DRIVER_DEFAULT=org.postgresql.Driver
+			: ${ATL_DB_SCHEMA_NAME:=public}
+			: ${ATL_DB_DRIVER:=org.postgresql.Driver}
 		;;
 		h2)
-			ATL_DB_SCHEMA_NAME_DEFAULT=
-			ATL_DB_DRIVER_DEFAULT=org.h2.Driver
+			: ${ATL_DB_SCHEMA_NAME:=}
+			: ${ATL_DB_DRIVER:=org.h2.Driver}
 		;;
 		*)
 			echo 'ATL_DB_TYPE unknown or not specified'
@@ -175,8 +174,6 @@ if [ -e "${JIRA_HOME}/dbconfig.xml" ] || [ ${#DB_VARS[@]} -gt 0 ]; then
 	check_defined ATL_JDBC_URL
 	: ${ATL_JDBC_USER:=}
 	: ${ATL_JDBC_PASSWORD:=}
-	: ${ATL_DB_SCHEMA_NAME:=${ATL_DB_SCHEMA_NAME_DEFAULT}}
-	: ${ATL_DB_DRIVER:=${ATL_DB_DRIVER_DEFAULT}}
 
 	## optional
 	: ${ATL_DB_MAXIDLE:=20}
@@ -222,9 +219,11 @@ if [ -e "${JIRA_HOME}/dbconfig.xml" ] || [ ${#DB_VARS[@]} -gt 0 ]; then
 		  </jdbc-datasource>
 		</jira-database-config>
 	EOF
+
+	unset "${DB_VARS[@]}"
 fi
 
-unset "${DB_VARS[@]}"
+unset DB_VARS
 
 ################################################################################
 # Cluster
