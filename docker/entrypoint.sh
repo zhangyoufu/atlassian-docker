@@ -234,7 +234,7 @@ check_bool CLUSTERED
 if [ "${CLUSTERED}" = "false" ]; then
 	rm -f "${JIRA_HOME}/clusters.properties"
 else
-	if [ -z "${JIRA_NODE_ID}" ]; then
+	if [ ! -v JIRA_NODE_ID ]; then
 		JIRA_NODE_ID=jira-node-$(shuf --random-source=/dev/urandom -er -n12 {0..9} {a..f} | tr -d '\n')
 	fi
 	: ${JIRA_SHARED_HOME:=${JIRA_HOME}/shared}
@@ -249,22 +249,22 @@ else
 	fi
 	if [ "${EHCACHE_PEER_DISCOVERY}" = "automatic" ]; then
 		cat >>"${JIRA_HOME}/clusters.properties" <<-EOF
-			ehcache.multicast.address=$(prop_value_escape "${EHCACHE_MULTICAST_ADDRESS})
-			ehcache.multicast.port=$(prop_value_escape "${EHCACHE_MULTICAST_PORT})
-			ehcache.multicast.timeToLive=$(prop_value_escape "${EHCACHE_MULTICAST_TIMETOLIVE})
-			ehcache.multicast.hostName=$(prop_value_escape "${EHCACHE_MULTICAST_HOSTNAME})
+			ehcache.multicast.address=$(prop_value_escape "${EHCACHE_MULTICAST_ADDRESS:-})
+			ehcache.multicast.port=$(prop_value_escape "${EHCACHE_MULTICAST_PORT:-})
+			ehcache.multicast.timeToLive=$(prop_value_escape "${EHCACHE_MULTICAST_TIMETOLIVE:-})
+			ehcache.multicast.hostName=$(prop_value_escape "${EHCACHE_MULTICAST_HOSTNAME:-})
 		EOF
 	fi
-	if [ -n "${EHCACHE_LISTENER_HOSTNAME}" ]; then
+	if [ -v EHCACHE_LISTENER_HOSTNAME ]; then
 		echo "ehcache.listener.hostName=$(prop_value_escape "${EHCACHE_LISTENER_HOSTNAME}")" >>"${JIRA_HOME}/clusters.properties"
 	fi
-	if [ -n "${EHCACHE_LISTENER_PORT}" ]; then
+	if [ -v EHCACHE_LISTENER_PORT ]; then
 		echo "ehcache.listener.port=$(prop_value_escape "${EHCACHE_LISTENER_PORT}")" >>"${JIRA_HOME}/clusters.properties"
 	fi
-	if [ -n "${EHCACHE_OBJECT_PORT}" ]; then
+	if [ -v EHCACHE_OBJECT_PORT ]; then
 		echo "ehcache.object.port=$(prop_value_escape "${EHCACHE_OBJECT_PORT}")" >>"${JIRA_HOME}/clusters.properties"
 	fi
-	if [ -n "${EHCACHE_LISTENER_SOCKETTIMEOUTMILLIS}" ]; then
+	if [ -v EHCACHE_LISTENER_SOCKETTIMEOUTMILLIS ]; then
 		echo "ehcache.listener.socketTimeoutMillis=$(prop_value_escape "${EHCACHE_LISTENER_SOCKETTIMEOUTMILLIS}")" >>"${JIRA_HOME}/clusters.properties"
 	fi
 fi
