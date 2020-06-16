@@ -25,10 +25,10 @@ jobs:
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-EAP02.tar.gz'
           md5: '5e0eb3637b0f3604391db504d0efcfe0'
           tags: '8.10.0-EAP02 8.10'
-        - version: '8.9.0'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.9.0.tar.gz'
-          md5: '9425568851d16e16e234b9f419a6ecf2'
-          tags: '8.9.0 8.9 8'
+        - version: '8.9.1'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.9.1.tar.gz'
+          md5: '4af366c5701be5b19bd036975a085348'
+          tags: '8.9.1 8.9 8'
 # DONT-CHECKSUM-END
     steps:
     - uses: actions/checkout@v2
