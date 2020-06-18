@@ -21,10 +21,10 @@ jobs:
       matrix:
         include:
 # DONT-CHECKSUM-BEGIN
-        - version: '8.10.0-EAP02'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-EAP02.tar.gz'
-          md5: '5e0eb3637b0f3604391db504d0efcfe0'
-          tags: '8.10.0-EAP02 8.10'
+        - version: '8.10.0-RC01'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.10.0-RC01.tar.gz'
+          md5: '656b64b7b474409164637c15fc0de694'
+          tags: '8.10.0-RC01 8.10'
         - version: '8.9.1'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.9.1.tar.gz'
           md5: '4af366c5701be5b19bd036975a085348'
