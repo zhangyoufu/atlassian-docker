@@ -1,0 +1,108 @@
+diff --git a/bin/setenv.sh b/bin/setenv.sh
+index 44c9e19..82ad0b8 100755
+--- a/bin/setenv.sh
++++ b/bin/setenv.sh
+@@ -52,13 +52,6 @@ else
+   fi
+ fi
+ 
+-echo "---------------------------------------------------------------------------"
+-echo "Using Java: $JRE_HOME/bin/java"
+-CONFLUENCE_CONTEXT_PATH=`$JRE_HOME/bin/java -jar $CATALINA_HOME/bin/confluence-context-path-extractor.jar $CATALINA_HOME`
+-export CONFLUENCE_CONTEXT_PATH
+-$JRE_HOME/bin/java -jar $CATALINA_HOME/bin/synchrony-proxy-watchdog.jar $CATALINA_HOME
+-echo "---------------------------------------------------------------------------"
+-
+ # Set the JVM arguments used to start Confluence.
+ # For a description of the vm options of jdk 8, see:
+ # http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
+@@ -71,14 +64,15 @@ CATALINA_OPTS="-Xloggc:$LOGBASEABS/logs/gc-`date +%F_%H-%M-%S`.log -XX:+UseGCLog
+ CATALINA_OPTS="-XX:G1ReservePercent=20 ${CATALINA_OPTS}"
+ CATALINA_OPTS="-Djava.awt.headless=true ${CATALINA_OPTS}"
+ CATALINA_OPTS="-Datlassian.plugins.enable.wait=300 ${CATALINA_OPTS}"
+-CATALINA_OPTS="-Xms1024m -Xmx1024m -XX:+UseG1GC ${CATALINA_OPTS}"
++CATALINA_OPTS="-Xms${JVM_MINIMUM_MEMORY:=1024m} -Xmx${JVM_MAXIMUM_MEMORY:=1024m} -XX:+UseG1GC ${CATALINA_OPTS}"
+ CATALINA_OPTS="-Dsynchrony.enable.xhr.fallback=true ${CATALINA_OPTS}"
+ CATALINA_OPTS="-Dorg.apache.tomcat.websocket.DEFAULT_BUFFER_SIZE=32768 ${CATALINA_OPTS}"
+ CATALINA_OPTS="-Djava.locale.providers=JRE,SPI,CLDR ${CATALINA_OPTS}"
+ CATALINA_OPTS="${START_CONFLUENCE_JAVA_OPTS} ${CATALINA_OPTS}"
+-CATALINA_OPTS="-Dconfluence.context.path=${CONFLUENCE_CONTEXT_PATH} ${CATALINA_OPTS}"
+ CATALINA_OPTS="-Djdk.tls.server.protocols=TLSv1.1,TLSv1.2 -Djdk.tls.client.protocols=TLSv1.1,TLSv1.2 ${CATALINA_OPTS}"
+-CATALINA_OPTS="-XX:ReservedCodeCacheSize=256m -XX:+UseCodeCacheFlushing ${CATALINA_OPTS}"
++CATALINA_OPTS="-XX:ReservedCodeCacheSize=${JVM_RESERVED_CODE_CACHE_SIZE:=256m} -XX:+UseCodeCacheFlushing ${CATALINA_OPTS}"
++CATALINA_OPTS="-Dconfluence.home=${CONFLUENCE_HOME} ${CATALINA_OPTS}"
++CATALINA_OPTS="${CATALINA_OPTS} ${JVM_SUPPORT_RECOMMENDED_ARGS}"
+ 
+ 
+ export CATALINA_OPTS
+diff --git a/conf/catalina.properties b/conf/catalina.properties
+index 4a39cf7..b40c825 100644
+--- a/conf/catalina.properties
++++ b/conf/catalina.properties
+@@ -204,3 +204,6 @@ tomcat.util.buf.StringCache.byte.enabled=true
+ #tomcat.util.buf.StringCache.char.enabled=true
+ #tomcat.util.buf.StringCache.trainThreshold=500000
+ #tomcat.util.buf.StringCache.cacheSize=5000
++
++# Use environment variables as property source (consumed by conf/server.xml)
++org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource
+diff --git a/conf/server.xml b/conf/server.xml
+index 19f57f4..75bd3f0 100644
+--- a/conf/server.xml
++++ b/conf/server.xml
+@@ -1,5 +1,21 @@
+-<Server port="8000" shutdown="SHUTDOWN" debug="0">
++<Server port="${ATL_TOMCAT_MGMT_PORT}" shutdown="SHUTDOWN">
+     <Service name="Tomcat-Standalone">
++        <Connector port="${ATL_TOMCAT_PORT}"
++                   maxThreads="${ATL_TOMCAT_MAXTHREADS}"
++                   minSpareThreads="${ATL_TOMCAT_MINSPARETHREADS}"
++                   connectionTimeout="${ATL_TOMCAT_CONNECTIONTIMEOUT}"
++                   enableLookups="${ATL_TOMCAT_ENABLELOOKUPS}"
++                   protocol="${ATL_TOMCAT_PROTOCOL}"
++                   redirectPort="${ATL_TOMCAT_REDIRECTPORT}"
++                   acceptCount="${ATL_TOMCAT_ACCEPTCOUNT}"
++                   maxHttpHeaderSize="${ATL_TOMCAT_MAXHTTPHEADERSIZE}"
++
++                   proxyName="${ATL_PROXY_NAME}"
++                   proxyPort="${ATL_PROXY_PORT}"
++                   scheme="${ATL_TOMCAT_SCHEME}"
++                   secure="${ATL_TOMCAT_SECURE}"
++        />
++
+         <!--
+          ==============================================================================================================
+          DEFAULT - Direct connector with no proxy, for unproxied HTTP access to Confluence.
+@@ -7,10 +23,12 @@
+          If using a http/https proxy, comment out this connector.
+          ==============================================================================================================
+         -->
++        <!--
+         <Connector port="8090" connectionTimeout="20000" redirectPort="8443"
+                    maxThreads="48" minSpareThreads="10"
+                    enableLookups="false" acceptCount="10" debug="0" URIEncoding="UTF-8"
+                    protocol="org.apache.coyote.http11.Http11NioProtocol"/>
++        -->
+         <!--
+          ==============================================================================================================
+          HTTP - Proxying Confluence via Apache or Nginx over HTTP
+@@ -72,15 +90,15 @@
+                    scheme="https" secure="true" proxyName="<subdomain>.<domain>.com" proxyPort="443"/>
+         -->
+ 
+-        <Engine name="Standalone" defaultHost="localhost" debug="0">
+-            <Host name="localhost" debug="0" appBase="webapps" unpackWARs="true" autoDeploy="false" startStopThreads="4">
+-                <Context path="" docBase="../confluence" debug="0" reloadable="false" useHttpOnly="true">
++        <Engine name="Standalone" defaultHost="localhost">
++            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false" startStopThreads="4">
++                <Context path="${ATL_TOMCAT_CONTEXTPATH}" docBase="../confluence" reloadable="false" useHttpOnly="true">
+                     <!-- Logging configuration for Confluence is specified in confluence/WEB-INF/classes/log4j.properties -->
+                     <Manager pathname=""/>
+                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60"/>
+                 </Context>
+ 
+-                <Context path="${confluence.context.path}/synchrony-proxy" docBase="../synchrony-proxy" debug="0"
++                <Context path="${ATL_TOMCAT_CONTEXTPATH}/synchrony-proxy" docBase="../synchrony-proxy"
+                          reloadable="false" useHttpOnly="true">
+                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60"/>
+                 </Context>

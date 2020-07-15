@@ -1,14 +1,39 @@
 # Overview
 
-This repo is a drop-in replacement of [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software) Docker image.
+This repo is a drop-in replacement for [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software) and [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/) Docker image.
 
 Use environment variables as property source, and reference them from Tomcat server.xml, without relying on Jinja2 templates.
 
 # Supported tags
 
-* `8.10.0-EAP01`, `8.10`
-* `8.9.0`, `8.9`, `8`
+## Jira Software
+
+* `8.11.0-RC01`, `8.11`
+* `8.10.0`, `8.10`, `8`
+* `8.9.1`, `8.9`
+
+## Confluence
+
+* `7.7.0-m28`, `7.7`
+* `7.6.1`, `7.6`, `7`
+* `7.5.2`, `7.5`
+* `7.4.1`, `7.4`
 
 # Usage
 
-See [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software/).
+Please consult official repo:
+
+* [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software/)
+* [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/)
+
+# Unsupported features
+
+## Confluence
+
+* ATL_TOMCAT_ACCESS_LOG
+
+# Note
+
+## for Confluence Data Center cluster
+
+If you want to reconfigure database or cluster, make sure you specified both database and cluster related environment variables, which are required to regenerate confluence.cfg.xml from scratch.

@@ -20,13 +20,13 @@ class Version(typing.NamedTuple):
 
     @classmethod
     def from_string(self, s):
-        m = re.fullmatch(r'(\d+)\.(\d+)(?:\.(\d+))?(?:-([A-Za-z]+)(\d{2}))?', s)
+        m = re.fullmatch(r'(\d+)\.(\d+)(?:\.(\d+))?(?:-([A-Za-z]+)(\d+))?', s)
         assert m, s
         major, minor, patch, suffix_series, suffix_number = m.groups()
         major = int(major)
         minor = int(minor)
         patch = int(patch) if patch else 0
-        suffix_series = {'EAP': -2, 'RC': -1, None: 0}[suffix_series]
+        suffix_series = suffix_series_lut[suffix_series]
         suffix_number = int(suffix_number) if suffix_number else 0
         return Version(major, minor, patch, suffix_series, suffix_number, s)
 
@@ -43,58 +43,72 @@ def query_download(channel, application, *, filter_func=None):
         data = list(filter(filter_func, data))
     return data
 
-def filter_non_eap(item):
+def filter_general(item):
     return item['description'].endswith(f'(TAR.GZ Archive)')
 
-def filter_eap(item):
+def filter_jira_eap(item):
     return bool(re.fullmatch(r'Jira Software .* \(TAR.GZ Archive\)', item['description']))
 
 def main():
-    minimum = Version.from_string('8.9.0')
-    latest = {}
-    for channel in ['archived', 'current', 'eap']:
-        print(f'Querying {channel} channel...')
-        if channel == 'eap':
-            application = 'jira' # mixing Jira Core/Software/Servicedesk
-            filter_func = filter_eap
-        else:
-            application = 'jira-software'
-            filter_func = filter_non_eap
-        for item in query_download(channel, application, filter_func=filter_func):
-            version = item['version']
-            print(f'Got version {version}')
-            version = Version.from_string(version)
-            if version < minimum:
-                continue
+    global suffix_series_lut
+    matrix = []
 
-            latest_version, latest_item = latest.setdefault(version.major, {}).setdefault(version.minor, (version, item))
-            if latest_version is version:
-                continue
-            if version > latest_version:
-                latest[version.major][version.minor] = (version, item)
+    for application in ['jira-software', 'confluence']:
+        print(f'Processing {application}')
+        suffix_series_lut = {
+            'jira-software': {'EAP': -2, 'RC': -1, None: 0},
+            'confluence': {'m': -3, 'beta': -2, 'rc': -1, None: 0},
+        }[application]
+        minimum = Version.from_string({
+            'jira-software': '8.9.0',
+            'confluence': '7.4.0',
+        }[application])
 
-    versions = []
-    for major in sorted(latest.keys(), reverse=True):
-        first = True
-        for minor in sorted(latest[major].keys(), reverse=True):
-            _, item = latest[major][minor]
-            tags = [item['version'], f'{major}.{minor}']
-            if first and item['type'] == 'Binary':
-                first = False
-                tags.append(f'{major}')
+        latest = {}
+        for channel in ['archived', 'current', 'eap']:
+            print(f'Querying {channel} channel...')
+            _application = application
+            filter_func = filter_general
+            if application == 'jira-software' and channel == 'eap':
+                _application = 'jira' # mixing Jira Core/Software/Servicedesk
+                filter_func = filter_jira_eap
+            for item in query_download(channel, _application, filter_func=filter_func):
+                version = item['version']
+                if int(version.split('.', 1)[0]) < minimum.major:
+                    continue
+                print(f'Got version {version}')
+                version = Version.from_string(version)
+                if version < minimum:
+                    continue
 
-            # sanity check
-            assert item['zipUrl'].startswith('https://')
-            assert re.fullmatch(r'[0-9a-f]{32}', item['md5'])
+                latest_version, latest_item = latest.setdefault(version.major, {}).setdefault(version.minor, (version, item))
+                if latest_version is version:
+                    continue
+                if version > latest_version:
+                    latest[version.major][version.minor] = (version, item)
 
-            versions.append(f'''\
-        - version: {item['version']!r}
+        for major in sorted(latest.keys(), reverse=True):
+            first = True
+            for minor in sorted(latest[major].keys(), reverse=True):
+                _, item = latest[major][minor]
+                tags = [item['version'], f'{major}.{minor}']
+                if first and item['type'] == 'Binary':
+                    first = False
+                    tags.append(f'{major}')
+
+                # sanity check
+                assert item['zipUrl'].startswith('https://')
+                assert re.fullmatch(r'[0-9a-f]{32}', item['md5'])
+
+                matrix.append(f'''\
+        - application: {application}
+          version: {item['version']!r}
           url: {item['zipUrl']!r}
           md5: {item['md5']!r}
           tags: {' '.join(tags)!r}''')
 
     with open('.github/workflows/build.yml', 'r+') as f:
-        data, n = re.subn(r'(?ms)(?<=^# DONT-CHECKSUM-BEGIN\n).*?(?=\n^# DONT-CHECKSUM-END\n)', '\n'.join(versions), f.read(), count=1)
+        data, n = re.subn(r'(?ms)(?<=^# DONT-CHECKSUM-BEGIN\n).*?(?=\n^# DONT-CHECKSUM-END\n)', '\n'.join(matrix), f.read(), count=1)
         assert n == 1
         f.seek(0)
         f.write(data)
