@@ -17,6 +17,8 @@ jobs:
         pip install -r requirements.txt
     - name: Check latest releases from Atlassian
       run: ./check.py
+    - name: Update readme
+      run: ./update-readme.py
     - name: Commit if dirty
       env:
         PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
