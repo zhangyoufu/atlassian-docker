@@ -53,10 +53,10 @@ jobs:
           md5: 'b68ecb32854d30d2ad519f2efc1488aa'
           tags: '7.7.0-tinymce5-m01 7.7-tinymce5'
         - application: confluence
-          version: '7.6.1'
-          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.6.1.tar.gz'
-          md5: '63b31bddcaa9ac6373c8592b032e71be'
-          tags: '7.6.1 7.6 7'
+          version: '7.6.2'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.6.2.tar.gz'
+          md5: '7d72a1bd874bc2fb769efdce0a376c39'
+          tags: '7.6.2 7.6 7'
         - application: confluence
           version: '7.5.2'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.5.2.tar.gz'
