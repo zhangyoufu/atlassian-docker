@@ -8,7 +8,8 @@ Use environment variables as property source, and reference them from Tomcat ser
 
 ## Jira Software
 
-* `8.12.0-EAP02`, `8.12`
+* `8.13.0-EAP01`, `8.13`
+* `8.12.0-RC01`, `8.12`
 * `8.11.0`, `8.11`, `8`
 * `8.10.1`, `8.10`
 * `8.9.1`, `8.9`
