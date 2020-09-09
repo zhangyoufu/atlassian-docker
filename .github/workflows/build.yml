@@ -68,10 +68,10 @@ jobs:
           md5: '3b5f6daa4dc6de0e45eddb0ed7b71611'
           tags: '7.5.2 7.5'
         - application: confluence
-          version: '7.4.3'
-          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.4.3.tar.gz'
-          md5: '8fd7ce309c709e17bc51f6b2ef8d8cb6'
-          tags: '7.4.3 7.4'
+          version: '7.4.4'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.4.4.tar.gz'
+          md5: '91bcd385aaa06b95703f4a1b39f7598b'
+          tags: '7.4.4 7.4'
 # DONT-CHECKSUM-END
     env:
       IMAGE_PATH: ${{ secrets.IMAGE_PATH }}${{ matrix.application }}

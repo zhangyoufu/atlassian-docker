@@ -20,7 +20,7 @@ Use environment variables as property source, and reference them from Tomcat ser
 * `7.7.3`, `7.7`, `7`
 * `7.6.2`, `7.6`
 * `7.5.2`, `7.5`
-* `7.4.3`, `7.4`
+* `7.4.4`, `7.4`
 
 # Usage
 
