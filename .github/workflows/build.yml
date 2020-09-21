@@ -28,10 +28,10 @@ jobs:
           md5: 'd9b114b07ec393c8ca681303373a0d69'
           tags: '8.13.0-EAP03 8.13'
         - application: jira-software
-          version: '8.12.1'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.12.1.tar.gz'
-          md5: 'f3569de674690f9d1df46428c660f771'
-          tags: '8.12.1 8.12 8'
+          version: '8.12.2'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.12.2.tar.gz'
+          md5: '357038312aa7fb791bdd9e30d1982c28'
+          tags: '8.12.2 8.12 8'
         - application: jira-software
           version: '8.11.1'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.11.1.tar.gz'
