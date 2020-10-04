@@ -89,7 +89,7 @@ jobs:
           application/${{ matrix.application }}/patch.diff
       run: |
         FILES_HASH=$(./hashFiles.py <<<${FILES})
-        echo "::set-env name=CHECKSUM::${MD5}-${FILES_HASH}"
+        echo "CHECKSUM=$MD5-$FILES_HASH" >>$GITHUB_ENV
     - name: Fetch last checksum from Docker image label
       env:
         TAG: ${{ matrix.version }}
@@ -149,7 +149,7 @@ jobs:
         . application/${{ matrix.application }}/build-env.sh
         APP=${app^^}
         IMAGE_ID=$(docker build --squash --quiet --label "build.checksum=${CHECKSUM}" --build-arg "APP=${APP}" --build-arg "USER=${app}" --build-arg "GROUP=${app}" --build-arg "UID_GID=${UID_GID}" --build-arg "PORT=${PORT}" --build-arg "APP_INSTALL_DIR=/opt/atlassian/${app}" --build-arg "APP_HOME=/var/atlassian/application-data/${app}" docker)
-        echo "::set-env name=IMAGE_ID::${IMAGE_ID}"
+        echo "IMAGE_ID=$IMAGE_ID" >>$GITHUB_ENV
     - name: Push to Docker Hub
       if: env.CHECKSUM != env.LAST_CHECKSUM && github.ref == 'refs/heads/master'
       env:

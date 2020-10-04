@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import sys
 
 try:
@@ -7,4 +8,5 @@ try:
 except Exception:
     checksum = 'N/A'
 
-print(f'::set-env name=LAST_CHECKSUM::{checksum}')
+with open(os.environ['GITHUB_ENV'], 'a') as f:
+    f.write(f'LAST_CHECKSUM={checksum}\n')
