@@ -16,7 +16,7 @@ Use environment variables as property source, and reference them from Tomcat ser
 
 ## Confluence
 
-* `7.9.0-m28`, `7.9`
+* `7.9.0-m34`, `7.9`
 * `7.8.0`, `7.8`, `7`
 * `7.7.4`, `7.7`
 * `7.6.2`, `7.6`

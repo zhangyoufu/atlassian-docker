@@ -48,10 +48,10 @@ jobs:
           md5: '4af366c5701be5b19bd036975a085348'
           tags: '8.9.1 8.9'
         - application: confluence
-          version: '7.9.0-m28'
-          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.9.0-m28.tar.gz'
-          md5: '3f64d306e9e94f7e33bd7969ceff48e1'
-          tags: '7.9.0-m28 7.9'
+          version: '7.9.0-m34'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.9.0-m34.tar.gz'
+          md5: 'fe2a31d7799c9878b58c109fe5c1ab7e'
+          tags: '7.9.0-m34 7.9'
         - application: confluence
           version: '7.8.0'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.8.0.tar.gz'
