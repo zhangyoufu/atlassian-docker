@@ -21,7 +21,7 @@ class Version(typing.NamedTuple):
 
     @classmethod
     def from_string(self, s):
-        m = re.fullmatch(r'(\d+)\.(\d+)(?:\.(\d+))?(?:(?:-([a-z0-9]+))?-([A-Za-z]+)(\d+))?', s)
+        m = re.fullmatch(r'(\d+)\.(\d+)(?:\.(\d+))?(?:(?:-([-a-z0-9]+))?-([A-Za-z]+)(\d+))?', s)
         assert m, s
         major, minor, patch, branch, suffix_series, suffix_number = m.groups()
         major = int(major)
