@@ -18,7 +18,7 @@ Use environment variables as property source, and reference them from Tomcat ser
 
 * `7.10.0-xstream-14-m02`, `7.10-xstream-14`
 * `7.9.0-beta1`, `7.9`
-* `7.8.1`, `7.8`, `7`
+* `7.8.3`, `7.8`, `7`
 * `7.7.4`, `7.7`
 * `7.6.2`, `7.6`
 * `7.5.2`, `7.5`
