@@ -16,7 +16,7 @@ Use environment variables as property source, and reference them from Tomcat ser
 
 ## Confluence
 
-* `7.10.0-xstream-14-m02`, `7.10-xstream-14`
+* `7.10.0-xstream-14-m03`, `7.10-xstream-14`
 * `7.9.0-rc2`, `7.9`
 * `7.8.3`, `7.8`, `7`
 * `7.7.4`, `7.7`
