@@ -96,7 +96,7 @@ jobs:
           .github/workflows/build.yml
           docker/**
           docker-shared-components/support/**
-          application/${{ matrix.application }}/patch.diff
+          application/${{ matrix.application }}/**
       run: |
         FILES_HASH=$(./hashFiles.py <<<${FILES})
         echo "CHECKSUM=$MD5-$FILES_HASH" >>$GITHUB_ENV
