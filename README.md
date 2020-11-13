@@ -37,6 +37,7 @@ Please consult official repo:
 ## Confluence
 
 * ATL_TOMCAT_ACCESS_LOG
+* ATL_TOMCAT_PROXY_INTERNAL_IPS
 
 # Note
 
