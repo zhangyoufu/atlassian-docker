@@ -380,7 +380,9 @@ if [ "${SET_PERMISSIONS}" = "true" ]; then
 	ensure_fs_owner_group_mode "${CONFLUENCE_INSTALL_DIR}/logs"
 	ensure_fs_owner_group_mode "${CONFLUENCE_INSTALL_DIR}/temp"
 	ensure_fs_owner_group_mode "${CONFLUENCE_INSTALL_DIR}/work"
-	ensure_fs_owner_group_mode "${ATL_PRODUCT_HOME_SHARED}"
+	if [ -v ATL_PRODUCT_HOME_SHARED ]; then
+		ensure_fs_owner_group_mode "${ATL_PRODUCT_HOME_SHARED}"
+	fi
 fi
 unset ATL_PRODUCT_HOME_SHARED
 
