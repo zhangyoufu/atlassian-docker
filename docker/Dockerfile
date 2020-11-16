@@ -1,5 +1,8 @@
 FROM ubuntu:latest@sha256:1d7b639619bdca2d008eca2d5293e3c43ff84cbee597ff76de3b7a7de3e84956
 
+# locale (for file.encoding property)
+ENV LC_CTYPE=C.UTF-8
+
 # upgrade/install distro packages
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
