@@ -32,6 +32,8 @@ Please consult official repo:
 * [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software/)
 * [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/)
 
+Note: some punctuations (`&<>"'`), control characters and Unicode characters need to be encoded as XML entities manually.
+
 # Unsupported features
 
 ## Confluence
