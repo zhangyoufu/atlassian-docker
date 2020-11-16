@@ -108,6 +108,9 @@ if [ -n "${_ATL_AUTOLOGIN_COOKIE_AGE}" ] && [ "${ATL_AUTOLOGIN_COOKIE_AGE}" != "
 fi
 unset ATL_AUTOLOGIN_COOKIE_AGE _ATL_AUTOLOGIN_COOKIE_AGE
 
+: ${CONFLUENCE_LOG_STDOUT:=true}
+export CONFLUENCE_LOG_STDOUT
+
 ################################################################################
 # utility
 ################################################################################
