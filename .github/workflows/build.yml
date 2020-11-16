@@ -48,6 +48,11 @@ jobs:
           md5: '4af366c5701be5b19bd036975a085348'
           tags: '8.9.1 8.9'
         - application: confluence
+          version: '7.10.0-m32'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.10.0-m32.tar.gz'
+          md5: '4786d39bf17641dae183c8ce293ac4e4'
+          tags: '7.10.0-m32 7.10'
+        - application: confluence
           version: '7.10.0-xstream-14-m03'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.10.0-xstream-14-m03.tar.gz'
           md5: '52947d4caa1708e497ce3cc7f9fda94f'
