@@ -23,15 +23,15 @@ jobs:
         include:
 # DONT-CHECKSUM-BEGIN
         - application: jira-software
-          version: '8.14.0-RC01'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.14.0-RC01.tar.gz'
-          md5: 'e62b29fdbe26c4014ea0af21a9755e1a'
-          tags: '8.14.0-RC01 8.14'
+          version: '8.14.0'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.14.0.tar.gz'
+          md5: 'ee80346169aa5b2a92fba8d6a40529d3'
+          tags: '8.14.0 8.14 8'
         - application: jira-software
           version: '8.13.1'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.1.tar.gz'
           md5: 'c267a5acca35288bea8a000d3c9aefd1'
-          tags: '8.13.1 8.13 8'
+          tags: '8.13.1 8.13'
         - application: jira-software
           version: '8.12.3'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.12.3.tar.gz'
