@@ -1,8 +1,7 @@
 diff --git a/bin/setenv.sh b/bin/setenv.sh
-index 708130a..1cb308b 100755
 --- a/bin/setenv.sh
 +++ b/bin/setenv.sh
-@@ -11,7 +11,7 @@ MIN_NOFILES_LIMIT=16384
+@@ -11,7 +11,7 @@
  #
  #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
  #
@@ -11,7 +10,7 @@ index 708130a..1cb308b 100755
  
  #
  #  You can use variable below to modify garbage collector settings.
-@@ -24,13 +24,13 @@ JVM_GC_ARGS="-XX:+ExplicitGCInvokesConcurrent"
+@@ -24,13 +24,13 @@
  #
  # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
  #
@@ -29,10 +28,9 @@ index 708130a..1cb308b 100755
  #
  # The following are the required arguments for Jira.
 diff --git a/conf/catalina.properties b/conf/catalina.properties
-index 8f12289..ac77af5 100644
 --- a/conf/catalina.properties
 +++ b/conf/catalina.properties
-@@ -212,3 +212,6 @@ tomcat.util.buf.StringCache.byte.enabled=true
+@@ -212,3 +212,6 @@
  # Allow for changes to HTTP request validation
  # WARNING: Using this option may expose the server to CVE-2016-6816
  #tomcat.util.http.parser.HttpParser.requestTargetAllow=|
@@ -40,7 +38,6 @@ index 8f12289..ac77af5 100644
 +# Use environment variables as property source (consumed by conf/server.xml)
 +org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource
 diff --git a/conf/server.xml b/conf/server.xml
-index 756321d..84b825c 100644
 --- a/conf/server.xml
 +++ b/conf/server.xml
 @@ -15,7 +15,7 @@
