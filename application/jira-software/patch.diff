@@ -38,7 +38,7 @@ index 8f12289..ac77af5 100644
  #tomcat.util.http.parser.HttpParser.requestTargetAllow=|
 +
 +# Use environment variables as property source (consumed by conf/server.xml)
-+org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.Digester$EnvironmentPropertySource
++org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource
 diff --git a/conf/server.xml b/conf/server.xml
 index 756321d..84b825c 100644
 --- a/conf/server.xml
