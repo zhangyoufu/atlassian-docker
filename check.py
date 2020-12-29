@@ -69,7 +69,7 @@ def main():
             'confluence': {'m': -3, 'beta': -2, 'rc': -1, None: 0},
         }[application]
         minimum = Version.from_string({
-            'jira-software': '8.9.0',
+            'jira-software': '8.13.0',
             'confluence': '7.4.0',
         }[application])
 
