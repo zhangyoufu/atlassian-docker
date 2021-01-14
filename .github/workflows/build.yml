@@ -28,15 +28,15 @@ jobs:
           md5: '939c76462afbdaae28e9b42f89d12979'
           tags: '8.15.0-EAP03 8.15'
         - application: jira-software
-          version: '8.14.0'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.14.0.tar.gz'
-          md5: 'ee80346169aa5b2a92fba8d6a40529d3'
-          tags: '8.14.0 8.14 8'
+          version: '8.14.1'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.14.1.tar.gz'
+          md5: '14df869e375906efc3f1615e3b803297'
+          tags: '8.14.1 8.14 8'
         - application: jira-software
-          version: '8.13.2'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.2.tar.gz'
-          md5: '2875ad1bd152689a5d5648efe1a85f1b'
-          tags: '8.13.2 8.13'
+          version: '8.13.3'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.3.tar.gz'
+          md5: '5bac3b6223b5befe5ffde02a7acff91f'
+          tags: '8.13.3 8.13'
         - application: confluence
           version: '7.11.0-beta1'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.11.0-beta1.tar.gz'
