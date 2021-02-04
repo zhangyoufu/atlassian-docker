@@ -68,10 +68,10 @@ jobs:
           md5: '9fffb02b0b5e1ef0a8ef35865c320f25'
           tags: '7.7.4 7.7'
         - application: confluence
-          version: '7.6.2'
-          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.6.2.tar.gz'
-          md5: '7d72a1bd874bc2fb769efdce0a376c39'
-          tags: '7.6.2 7.6'
+          version: '7.6.3'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.6.3.tar.gz'
+          md5: '9f6cd2003edf87d61f0c7448a4b063e7'
+          tags: '7.6.3 7.6'
         - application: confluence
           version: '7.5.2'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.5.2.tar.gz'
