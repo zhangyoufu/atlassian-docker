@@ -43,6 +43,11 @@ jobs:
           md5: '5bac3b6223b5befe5ffde02a7acff91f'
           tags: '8.13.3 8.13'
         - application: confluence
+          version: '7.12.0-m26'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.12.0-m26.tar.gz'
+          md5: 'e76cdb20e853db0a5802cff7c9e19513'
+          tags: '7.12.0-m26 7.12'
+        - application: confluence
           version: '7.11.0'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.11.0.tar.gz'
           md5: '7482f7ce9e1da8b5eaf88ef16fcf8ac6'
