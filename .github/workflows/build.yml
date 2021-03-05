@@ -43,10 +43,10 @@ jobs:
           md5: 'd29f095615556d2e813280ebfaa5402f'
           tags: '8.13.4 8.13'
         - application: confluence
-          version: '7.12.0-m38'
-          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.12.0-m38.tar.gz'
-          md5: 'af053301391ec024cef6a47d79378247'
-          tags: '7.12.0-m38 7.12'
+          version: '7.12.0-beta1'
+          url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.12.0-beta1.tar.gz'
+          md5: '7bd09e136de83896b9127aa89872d69d'
+          tags: '7.12.0-beta1 7.12'
         - application: confluence
           version: '7.11.1'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.11.1.tar.gz'
