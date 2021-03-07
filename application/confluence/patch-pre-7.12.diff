@@ -1,0 +1,15 @@
+diff --git a/bin/setenv.sh b/bin/setenv.sh
+--- a/bin/setenv.sh
++++ b/bin/setenv.sh
+@@ -67,1 +67,1 @@
+-CATALINA_OPTS="-Xms1024m -Xmx1024m -XX:+UseG1GC ${CATALINA_OPTS}"
++CATALINA_OPTS="-Xms${JVM_MINIMUM_MEMORY:=1024m} -Xmx${JVM_MAXIMUM_MEMORY:=1024m} -XX:+UseG1GC ${CATALINA_OPTS}"
+@@ -72,1 +72,0 @@
+-CATALINA_OPTS="-Dconfluence.context.path=${CONFLUENCE_CONTEXT_PATH} ${CATALINA_OPTS}"
+@@ -74,1 +73,1 @@
+-CATALINA_OPTS="-XX:ReservedCodeCacheSize=256m -XX:+UseCodeCacheFlushing ${CATALINA_OPTS}"
++CATALINA_OPTS="-XX:ReservedCodeCacheSize=${JVM_RESERVED_CODE_CACHE_SIZE:=256m} -XX:+UseCodeCacheFlushing ${CATALINA_OPTS}"
+@@ -77,1 +76,3 @@
++CATALINA_OPTS="-Dconfluence.home=${CONFLUENCE_HOME} ${CATALINA_OPTS}"
++CATALINA_OPTS="${CATALINA_OPTS} ${JVM_SUPPORT_RECOMMENDED_ARGS}"
+ export CATALINA_OPTS

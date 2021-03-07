@@ -139,9 +139,11 @@ jobs:
     - name: Patch
       if: env.CHECKSUM != env.LAST_CHECKSUM
       working-directory: docker/app
+      env:
+        VERSION: ${{ matrix.version }}
       run: |
         shopt -s globstar nullglob
-        patch -p1 <../../application/${{ matrix.application }}/patch.diff
+        ../../application/${{ matrix.application }}/patch.sh
         mkdir -p conf/Catalina/localhost
         rm bin/**/*.bat bin/**/*.{dll,exe}{,.x64} temp/safeToDelete.tmp
     - name: Copy support scripts
