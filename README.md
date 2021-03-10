@@ -40,9 +40,3 @@ Note: some punctuations (`&<>"'`), control characters and Unicode characters nee
 
 * ATL_TOMCAT_ACCESS_LOG
 * ATL_TOMCAT_PROXY_INTERNAL_IPS
-
-# Note
-
-## for Confluence Data Center cluster
-
-If you want to reconfigure database or cluster, make sure you specified both database and cluster related environment variables, which are required to regenerate confluence.cfg.xml from scratch.
