@@ -249,10 +249,10 @@ else
 	fi
 	if [ "${EHCACHE_PEER_DISCOVERY}" = "automatic" ]; then
 		cat >>"${JIRA_HOME}/clusters.properties" <<-EOF
-			ehcache.multicast.address=$(prop_value_escape "${EHCACHE_MULTICAST_ADDRESS:-})
-			ehcache.multicast.port=$(prop_value_escape "${EHCACHE_MULTICAST_PORT:-})
-			ehcache.multicast.timeToLive=$(prop_value_escape "${EHCACHE_MULTICAST_TIMETOLIVE:-})
-			ehcache.multicast.hostName=$(prop_value_escape "${EHCACHE_MULTICAST_HOSTNAME:-})
+			ehcache.multicast.address=$(prop_value_escape "${EHCACHE_MULTICAST_ADDRESS:-}")
+			ehcache.multicast.port=$(prop_value_escape "${EHCACHE_MULTICAST_PORT:-}")
+			ehcache.multicast.timeToLive=$(prop_value_escape "${EHCACHE_MULTICAST_TIMETOLIVE:-}")
+			ehcache.multicast.hostName=$(prop_value_escape "${EHCACHE_MULTICAST_HOSTNAME:-}")
 		EOF
 	fi
 	if [ -v EHCACHE_LISTENER_HOSTNAME ]; then
