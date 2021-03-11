@@ -315,6 +315,20 @@ property_env_optional confluence.cluster.aws.tag.value ATL_HAZELCAST_NETWORK_AWS
 mv "${CONFLUENCE_HOME}/confluence.cfg.xml.new" "${CONFLUENCE_HOME}/confluence.cfg.xml"
 
 ################################################################################
+# Hook
+################################################################################
+
+for HOOK_PATH in /docker-entrypoint.d/*; do
+	if [ -x "${HOOK_PATH}" ]; then
+		"${HOOK_PATH}"
+	else
+		echo "${HOOK_PATH} is not executable, skipped"
+	fi
+done
+
+unset HOOK_PATH
+
+################################################################################
 # Start
 ################################################################################
 

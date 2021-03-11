@@ -49,6 +49,7 @@ RUN install -d -m 750 -o "${USER}" -g "${GROUP}" "${APP_INSTALL_DIR}/work/"
 
 # entrypoint
 COPY entrypoint.sh /
+RUN mkdir /docker-entrypoint.d
 
 # runtime
 ENV ${APP}_INSTALL_DIR=${APP_INSTALL_DIR}
