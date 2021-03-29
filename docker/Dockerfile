@@ -1,4 +1,4 @@
-FROM ubuntu:latest@sha256:64255397e256fd33d6c6ddbc371027093315f9822089a32b8eeb045d83bb91c4
+FROM ubuntu:latest@sha256:a15789d24a386e7487a407274b80095c329f89b1f830e8ac6a9323aa61803964
 
 # locale (for file.encoding property)
 ENV LC_CTYPE=C.UTF-8
