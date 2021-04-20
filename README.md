@@ -8,10 +8,10 @@ Use environment variables as property source, and reference them from Tomcat ser
 
 ## Jira Software
 
-* `8.16.0`, `8.16`, `8`
+* `8.16.1`, `8.16`, `8`
 * `8.15.1`, `8.15`
 * `8.14.1`, `8.14`
-* `8.13.5`, `8.13`
+* `8.13.6`, `8.13`
 
 ## Confluence
 

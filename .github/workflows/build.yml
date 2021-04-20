@@ -23,10 +23,10 @@ jobs:
         include:
 # DONT-CHECKSUM-BEGIN
         - application: jira-software
-          version: '8.16.0'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.16.0.tar.gz'
-          md5: '74de33afcaefa7986e7890d0b824d739'
-          tags: '8.16.0 8.16 8'
+          version: '8.16.1'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.16.1.tar.gz'
+          md5: 'a5695e775fe5fbfbca43afa7d1984219'
+          tags: '8.16.1 8.16 8'
         - application: jira-software
           version: '8.15.1'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.15.1.tar.gz'
@@ -38,10 +38,10 @@ jobs:
           md5: '14df869e375906efc3f1615e3b803297'
           tags: '8.14.1 8.14'
         - application: jira-software
-          version: '8.13.5'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.5.tar.gz'
-          md5: 'f14329f1ee6674e5732d5f527984e5d5'
-          tags: '8.13.5 8.13'
+          version: '8.13.6'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.6.tar.gz'
+          md5: '0e28a78b94c29f7b303838eac2792826'
+          tags: '8.13.6 8.13'
         - application: confluence
           version: '7.13.0-m02'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.13.0-m02.tar.gz'
