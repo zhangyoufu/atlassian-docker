@@ -1,7 +1,7 @@
 on:
   schedule:
   - cron: '*/5 * * * *'
-
+concurrency: cron
 jobs:
   cron:
     runs-on: ubuntu-latest
