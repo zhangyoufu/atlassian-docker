@@ -1,0 +1,30 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "09:00"
+    timezone: Asia/Shanghai
+  open-pull-requests-limit: 99
+- package-ecosystem: gitsubmodule
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "09:00"
+    timezone: Asia/Shanghai
+  open-pull-requests-limit: 99
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "09:00"
+    timezone: Asia/Shanghai
+  open-pull-requests-limit: 99
+- package-ecosystem: docker
+  directory: "/docker"
+  schedule:
+    interval: daily
+    time: "09:00"
+    timezone: Asia/Shanghai
+  open-pull-requests-limit: 99
