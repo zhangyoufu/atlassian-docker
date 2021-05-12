@@ -111,7 +111,7 @@ jobs:
         (set +e; skopeo inspect "docker://${IMAGE_PATH}:${TAG}"; :) | ./last_checksum.py
     - name: Download from cache
       if: env.CHECKSUM != env.LAST_CHECKSUM
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.5
       id: cache
       with:
         path: app.tar.gz
