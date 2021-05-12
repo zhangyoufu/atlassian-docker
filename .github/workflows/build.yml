@@ -89,7 +89,7 @@ jobs:
     env:
       IMAGE_PATH: ${{ secrets.IMAGE_PATH }}${{ matrix.application }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
       with:
         submodules: true
     - name: Calculate checksum
