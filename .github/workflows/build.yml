@@ -16,10 +16,10 @@ jobs:
           md5: '1ad29306b2ee3aa2acb6687e69543bd1'
           tags: '8.17.0 8.17 8'
         - application: jira-software
-          version: '8.16.1'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.16.1.tar.gz'
-          md5: 'a5695e775fe5fbfbca43afa7d1984219'
-          tags: '8.16.1 8.16'
+          version: '8.16.2'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.16.2.tar.gz'
+          md5: 'a68c22725eb368c8ec1e7082726700fd'
+          tags: '8.16.2 8.16'
         - application: jira-software
           version: '8.15.1'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.15.1.tar.gz'
