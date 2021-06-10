@@ -11,6 +11,11 @@ jobs:
         include:
 # DONT-CHECKSUM-BEGIN
         - application: jira-software
+          version: '8.18.0-EAP01'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.18.0-EAP01.tar.gz'
+          md5: '194107fe1bf1bf39bc5be22d5f715166'
+          tags: '8.18.0-EAP01 8.18'
+        - application: jira-software
           version: '8.17.0'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.17.0.tar.gz'
           md5: '1ad29306b2ee3aa2acb6687e69543bd1'
