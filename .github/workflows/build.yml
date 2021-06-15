@@ -16,10 +16,10 @@ jobs:
           md5: '194107fe1bf1bf39bc5be22d5f715166'
           tags: '8.18.0-EAP01 8.18'
         - application: jira-software
-          version: '8.17.0'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.17.0.tar.gz'
-          md5: '1ad29306b2ee3aa2acb6687e69543bd1'
-          tags: '8.17.0 8.17 8'
+          version: '8.17.1'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.17.1.tar.gz'
+          md5: '496f036ce447183d4ef6a001e182df3b'
+          tags: '8.17.1 8.17 8'
         - application: jira-software
           version: '8.16.2'
           url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.16.2.tar.gz'
@@ -36,10 +36,10 @@ jobs:
           md5: '14df869e375906efc3f1615e3b803297'
           tags: '8.14.1 8.14'
         - application: jira-software
-          version: '8.13.7'
-          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.7.tar.gz'
-          md5: '44fc20961b096d96b230cfa7c39897d5'
-          tags: '8.13.7 8.13'
+          version: '8.13.8'
+          url: 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.13.8.tar.gz'
+          md5: 'fb52a3feae8517803836b893dfcff181'
+          tags: '8.13.8 8.13'
         - application: confluence
           version: '7.13.0-m09'
           url: 'https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.13.0-m09.tar.gz'
